@@ -2,16 +2,14 @@ package com.jpabook.jpashop.repository;
 
 import com.jpabook.jpashop.domain.Order;
 import com.jpabook.jpashop.domain.OrderSearch;
+import com.jpabook.jpashop.repository.order.simplequery.OrderSimpleQueryDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 
 @Repository
@@ -78,6 +76,15 @@ public class OrderRepository {
 
         return query.getResultList();
     }
+
+    public List<Order> findAllWithMemberDelivery() {
+        return em.createQuery("" +
+                "select o from Order o" +
+                " join fetch o.member m" +
+                " join fetch o.delivery d", Order.class)
+                .getResultList();
+    }
+
 
     /**
      * JPA Criteria
